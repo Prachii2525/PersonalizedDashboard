@@ -21,7 +21,8 @@ const WeatherWidget = () => {
   }, []);
 
   return (
-    <Widget title="Weather">
+    // Adding unique id "weather-widget" to ensure it's recognized correctly in the Dashboard component
+    <Widget title="Weather" id="weather-widget">
       {error ? (
         <div className="text-red-500 font-bold">{error}</div>
       ) : weather ? (
