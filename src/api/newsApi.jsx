@@ -7,12 +7,12 @@ export const fetchNewsData = async () => {
   }
 
   try {
-    const response = await fetch(`https://newsapi.org/v2/top-headlines?country=us&apiKey=${apiKey}`, {
+    // Updated URL for the Currents API
+    const response = await fetch(`https://api.currentsapi.services/v1/latest-news?apiKey=${apiKey}`, {
       method: 'GET',
       headers: {
         'Accept': 'application/json',
-        'Connection': 'upgrade', // Try adding this header
-        // Add other headers if needed
+        // No need for 'Connection: upgrade' header
       }
     });
 
@@ -22,8 +22,8 @@ export const fetchNewsData = async () => {
 
     const data = await response.json();
 
-    // Ensure that the response contains articles
-    return data.articles || [];
+    // Ensure that the response contains news
+    return data.news || [];
   } catch (error) {
     console.error('Error fetching news data:', error);
     return [];

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { ThemeContext } from '../contexts/ThemeContext';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import WeatherWidget from './WeatherWidget';
@@ -7,7 +7,7 @@ import CalendarWidget from './CalendarWidget';
 import TaskWidget from './TaskWidget';
 import ThemeSwitcher from './ThemeSwitcher';
 
-// Define initial order of widgets with unique IDs
+// Define initial order of widgets with unique draggableId
 const initialWidgets = [
   { id: 'weather-widget', component: <WeatherWidget /> },
   { id: 'news-widget', component: <NewsWidget /> },
@@ -18,11 +18,13 @@ const initialWidgets = [
 
 const Dashboard = () => {
   const { theme } = useContext(ThemeContext);
-  const [widgets, setWidgets] = React.useState(initialWidgets);
+  const [widgets, setWidgets] = useState(initialWidgets);
 
   // Handle drag end event
   const onDragEnd = (result) => {
-    if (!result.destination) return;
+    console.log('Drag result:', result); // Debugging
+
+    if (!result.destination) return; // If there's no destination, exit
 
     const reorderedWidgets = Array.from(widgets);
     const [movedWidget] = reorderedWidgets.splice(result.source.index, 1);
@@ -33,11 +35,9 @@ const Dashboard = () => {
 
   return (
     <div className={`min-h-screen p-8 ${theme === 'dark' ? 'bg-gray-900 text-white' : 'bg-gradient-to-r from-teal-500 to-blue-600'}`}>
-      <h1 className="text-4xl font-bold mb-8 text-center">
-        My Personalized Dashboard
-      </h1>
+      <h1 className="text-4xl font-bold mb-8 text-center">My Personalized Dashboard</h1>
       <DragDropContext onDragEnd={onDragEnd}>
-        <Droppable droppableId="dashboard-droppable">
+        <Droppable droppableId="dashboard">
           {(provided) => (
             <div
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
@@ -53,6 +53,7 @@ const Dashboard = () => {
                       {...provided.dragHandleProps}
                       className="p-4 bg-white rounded-lg shadow-lg dark:bg-gray-800"
                     >
+                      <p>{widget.id}</p> {/* Display widget ID */}
                       {widget.component}
                     </div>
                   )}
